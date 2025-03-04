@@ -1,0 +1,61 @@
+import {createBrowserRouter, RouterProvider} from 'react-router'
+import Home, {loader as itemsLoader}from './ui/Home'
+// import ItemComponents,  from './features/Items/ItemComponents'
+import Order, {loader as orderLoader} from './features/order/Order'
+import Cart from './features/cart/Cart'
+import CreateOrder, { action as sendFormOrderAction } from './features/order/CreateOrder'
+import AppLayout from './ui/AppLayou'
+import Error from './ui/Error'
+import Loader from './ui/Loader'
+import ViewItemsList from './features/Items/ViewItemsList'
+import AllOrder, {loader as allUserOrder} from './features/order/AllOrder'
+import OneItem, {loader as getOneItem} from './features/Items/OneItem'
+
+const router = createBrowserRouter([
+  {
+    element: <AppLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+        loader: itemsLoader,
+        errorElement: <Error />,
+      },
+      {
+        path: '/cart',
+        element: <Cart />
+      },
+      {
+        path: '/order/new',
+        element: <CreateOrder />,
+        action: sendFormOrderAction
+      },
+      {
+        path: '/order/:orderId',
+        element: <Order />,
+        loader: orderLoader,
+        errorElement: <Error />
+      },
+      {
+        path: '/item/all_Itesm',
+        element: <ViewItemsList />
+      },
+      {
+        path: '/item/:itemId',
+        element: <OneItem />,
+        loader: getOneItem,
+      },
+      {
+        path: '/user/orders/:id',
+        element: <AllOrder />,
+        loader: allUserOrder,
+        errorElement: <Error />
+      }
+    ]
+  }
+])
+
+export default function App() {
+  return <RouterProvider router={router} />
+}
