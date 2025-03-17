@@ -1,6 +1,8 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 export default function HeroImg() {
+
   return (
     <div className="w-[55%] relative" >
       <i           

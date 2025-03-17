@@ -41,9 +41,9 @@ export default function OneItem() {
 
   function handleDataSendToRedux() {
     
-    const cookies = new Cookies();
+    const {token} = JSON.parse(localStorage.getItem('userInfo'));
     
-    if (!cookies.get('e-commerce')) {
+    if (!token) {
       fallMessage("... لازم تسجل الدخول قبل ");
       return;
     }

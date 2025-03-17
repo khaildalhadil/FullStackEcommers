@@ -1,35 +1,30 @@
-import React from 'react'
-import { allUserOrder } from '../../services/apiGetItems.js'
+import React, { useEffect, useState } from 'react'
+import { getOneUser } from '../../services/apiGetItems.js'
 import { useLoaderData } from 'react-router'
+import OneOrder from './OneOrder.jsx';
 // import { allUserOrder } from '../../services/apiGetItems'
 
 export default function AllOrder() {
+
   const allOrders = useLoaderData();
+  console.log(allOrders);
+  
   return (
-    <div className='max-w-[1100px] m-auto mt-40 text-2xl' >
-      <h1 className='text-3xl mb-6'>Your Orders</h1>
-      <ul className='flex justify-between border-t border-stone-200 py-2' >
-        <li className='w-[20%] text-start' >prodcuts</li>
-        <li className='w-[20%] text-start' >Order Total</li>
-        <li className='w-[20%] text-start' >Tax</li>
-        <li className='w-[20%] text-start' >Shipping</li>
-        <li className='w-[20%] text-start' >Date</li>
-      </ul>
-      {allOrders.map((order, i) =>
-      
-        <ul className='flex justify-between  border-t border-stone-200 py-2' >
-          <li className='w-[20%] text-start' >{order.cart.length} item</li>
-          <li className='w-[20%] text-start' >{order.total} ﷼</li>
-          <li className='w-[20%] text-start' >{order.delivery}</li>
-          <li className='w-[20%] text-start' >Shipping</li>
-          <li className='w-[20%] text-start' >{order.createAt.split('T')[0]}</li>
-        </ul>
-      )}
+    <div className='max-w-[1300px] m-auto' >
+      {/* header */}
+
+      <h1 className='mb-5 text-end text-4xl mt-10' >🛒 طلباتك</h1>
+      <div className='flex flex-col gap-5 mb-10' >
+        {allOrders.map((order, i)=> {
+          return <OneOrder key={i} order={order} />
+        })}
+      </div>
     </div>
   )
 }
 
-export async function loader({params}) {
-  const allOrder = await allUserOrder(params.id)
-  return allOrder;
+export async function loader() {
+  const {token} = JSON.parse(localStorage.getItem('userInfo'));
+  const allOrder = await getOneUser(token);
+  return allOrder.orderID;
 }

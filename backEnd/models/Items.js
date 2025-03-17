@@ -22,7 +22,7 @@ const itemsSchima = new mongoose.Schema({
     type: Number,
     default: 1,
     min: [1, 'Rating must be above 1.0'],
-    min: [5, 'Rating must be below 5.0'],
+    mix: [5, 'Rating must be below 5.0'],
   },
   ratingsQuantity: {
     type: Number,

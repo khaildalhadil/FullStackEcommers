@@ -23,7 +23,7 @@ const useSch = new mongoose.Schema({
   },
   photo: {
     type: String,
-    default: 'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3383.jpg?semt=ais_hybrid'
+    default: "/img/users/default.png"
   },
   orderID: [
     {
@@ -31,6 +31,13 @@ const useSch = new mongoose.Schema({
       ref: 'Order'
     }
   ],
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
+  },
+  mobile: String,
+  address: String,
   password: {
     type: String,
     required: [true, 'Please provide a password'],
@@ -52,6 +59,7 @@ const useSch = new mongoose.Schema({
   passwordResetExpires: Date
 })
 
+// pre save will run before saveing to database
 useSch.pre('save', async function (next) {
   try {
     // check if password تغير من قبل 

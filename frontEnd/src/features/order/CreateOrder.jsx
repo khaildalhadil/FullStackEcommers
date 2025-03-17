@@ -3,6 +3,7 @@ import { Form, redirect, useActionData, useNavigation } from "react-router"
 import { sendOrder, updateOrderListuser } from "../../services/apiGetItems";
 import { useEffect, useRef } from "react";
 import MTCart from "../cart/MTCart";
+import Cookies from "universal-cookie";
 
 export default function CreateOrder() {
   // for form 
@@ -14,7 +15,7 @@ export default function CreateOrder() {
   const formErrors = useActionData();
 
   const {cart} = useSelector(store => store.cart);
-  const {userId} = useSelector(store => store.user);
+  const {userId} = useSelector(store => store.user.userInfo);
 
   const totlaPill = cart.map(item => item.totalPrice)
     .reduce((curr, next) => curr + next, 0);
@@ -92,15 +93,12 @@ export async function action({request}) {
 
   if (Object.keys(errors).length > 0) return errors;
 
-  // 
-  // JSON.parse(data.userId)
-  
-  
   const userOrder = await sendOrder(cart);
 
-  const userId = JSON.parse(data.userId);
+  const userId = userOrder.user;
   const orderId = userOrder._id
-  await updateOrderListuser(userId, orderId);
+  const {token} = JSON.parse(localStorage.getItem('userInfo'));
+  await updateOrderListuser(userId, orderId, token);
   
   return redirect(`/order/${userOrder._id}`);
 }

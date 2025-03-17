@@ -6,16 +6,10 @@ import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux';
 import { add as addUser } from '../features/users/userSlice';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function AppLayout() {
-
-  const dispatch = useDispatch();
-
-  const cookies = new Cookies();
-  const checkIfLogin = cookies.get('e-commerce')
-  if (checkIfLogin) {
-    const decoded = jwtDecode(checkIfLogin);
-    dispatch(addUser(decoded));
-  }
 
   const navigation = useNavigation();
   const isLoadding = navigation.state === "loading";
@@ -24,8 +18,8 @@ export default function AppLayout() {
     <div className='overflow-hidden relative'> 
     {isLoadding && <Loader />}
       <Header />
-
       <main >
+        <ToastContainer />
         <Outlet />
       </main>
 

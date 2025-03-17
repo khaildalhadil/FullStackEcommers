@@ -4,7 +4,7 @@ export default function Comment({comment}) {
 
   return (
     <div 
-    
+    key={comment._id}
     id={comment._id}
     className='w-[100%] space-y-4 p-4 rounded border border-stone-300 basis-sm' >
     <div className='flex justify-between gap-3 ml-auto'>
@@ -16,8 +16,8 @@ export default function Comment({comment}) {
           <div className='flex flex-row-reverse' >
             {Array.from({length: 5}, (_, index)=> 
               index >= comment.rating ? 
-                <i className="fa-regular fa-star "></i> : 
-                <i className="fa-solid fa-star text-blue-500 "></i>
+                <i key={index} className="fa-regular fa-star "></i> : 
+                <i key={index} className="fa-solid fa-star text-blue-500 "></i>
               )
             }
           </div>

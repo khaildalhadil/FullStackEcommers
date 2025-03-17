@@ -10,7 +10,7 @@ export default function AddComment({setShowReviewUi, itemId, newCommentAdded}) {
 
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(1);
-  const {userId} = useSelector(store => store.user);
+  const {userId} = useSelector(store => store.user.userInfo);
 
   async function handleSendReview() {
     try {
@@ -28,6 +28,7 @@ export default function AddComment({setShowReviewUi, itemId, newCommentAdded}) {
   
       await updateItemListComment(itemId, id);
       newCommentAdded(newComment);
+      successMessage('تم اضافة التعليق بنجاح')
     } catch(err) {
       console.log(`message Error: ${err.message} \nAll Eroor: ${err}`)      
     }
@@ -37,7 +38,6 @@ export default function AddComment({setShowReviewUi, itemId, newCommentAdded}) {
 
   return (
     <>
-      <ToastContainer position="top-center" autoClose={3000} />
       <div className='border border-stone-300 rounded p-5 mb-15'>
         <div>
           <p className='font-bold' >تقييمك</p>

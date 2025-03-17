@@ -18,11 +18,11 @@ export default function Header() {
   const [showAdminDropDown, setShowAdminDropDown] = useState(false);
 
   const {cart} = useSelector(store=> store.cart);
-  const {userId, userName, userEmail, photo} = useSelector(store=> store.user);
-
+  // const {userName, userEmail, photo} = useSelector(store=> store.user?.userInfo);
+  const userInfo = useSelector(store=> store.user.userInfo);
   function handleSinOut() {
-    const cookie = new Cookies();
-    cookie.remove('e-commerce');
+    // const cookie = new Cookies();
+    // cookie.remove('e-commerce');
     dispatch(delet());
     setShowDetailsAboutUserIcon((show)=> show = false);
     dispatch(removeAllCart());
@@ -38,9 +38,7 @@ export default function Header() {
           className='flex justify-between items-center px-10 text-zinc-600 max-w-[1400px] m-auto p-2 ' >
         <div>
           <Link to="/">
-            <img 
-              className='h-13 cursor-pointer'
-              src="./images/logo.jpg" alt="logo img" />
+            <i className="fa-solid fa-bag-shopping text-3xl"></i>
           </Link>
         </div>
         <div className='flex items-center gap-6 text-lg '>
@@ -52,16 +50,16 @@ export default function Header() {
           </div>
           <i className="fa-solid fa-moon border p-2 w-8   border-zinc-300 rounded"></i>
           <div className=' relative' >
-            {userId? 
+            {userInfo?.userName? 
             <div
             onClick={() => {
               setShowDetailsAboutUserIcon(!showDetailsAboutUserIcon)
               setShowAdminDropDown(false);
             }}
             className='flex items-center gap-6 text-2xl border px-5 py-1 rounded cursor-pointer border-zinc-300' >
-              <p className='text-lg'> {userName}</p>
+              <p className='text-lg'> {userInfo.userName}</p>
               <img
-              className='h-10 cursor-pointer' src={photo} alt={userName} />
+              className='h-10 cursor-pointer rounded-full w-10' src={`http://127.0.0.1:8000/${userInfo.photo}`} alt={userInfo.userName} />
             </div>
             :
             <i onClick={() => setShowDetailsAboutUserIcon(!showDetailsAboutUserIcon)}
@@ -71,23 +69,27 @@ export default function Header() {
             {showDetailsAboutUserIcon&&
               <div className='absolute w-48 rounded mt-2 border shadow-md border-zinc-300 box bg-white right-0' >
                 <ul className='flex flex-col' >
-                  {userId ? 
+                  {userInfo?.userName ? 
                   <>
                   <li className='flex gap-2 p-2 border-b border-zinc-200' >
-                    <img className='h-10' src={photo} alt={userName} />
+                    <img className='h-10' src={`http://127.0.0.1:8000/${userInfo.photo}`} alt={userInfo.userName} />
                     <div className='flex flex-col' >
-                      <p className='text-sm font-bold'  >{userName}</p>
-                      <p className='text-sm text-zinc-500' >{userEmail}</p>
+                      <p className='text-sm font-bold'  >{userInfo.userName}</p>
+                      <p className='text-sm text-zinc-500' >{userInfo.userEmail}</p>
                     </div>
                   </li>
                   <li
+                    onClick={()=> {
+                      setShowDetailsAboutUserIcon(false);
+                      navigate(`/user/profile`)
+                    }}
                     className=' flex items-center gap-2 border-b border-zinc-200 p-2 pl-4 cursor-pointer hover:bg-zinc-100'>
                     <i className="fa-regular fa-user"></i>
                     <p>My Profile</p>
                   </li>
                   <li
                     onClick={()=> {
-                      navigate(`/user/orders/${userId}`)
+                      navigate(`/user/orders`)
                       setShowDetailsAboutUserIcon(false)
                     }}
                     className=' flex items-center gap-2 border-b border-zinc-200 p-2 pl-4 cursor-pointer hover:bg-zinc-100'>
@@ -123,7 +125,7 @@ export default function Header() {
               </div>
             }
           </div>
-          <ul className=' relative' >
+          {/* <ul className=' relative' >
             <li
               onClick={() => {
                 setShowAdminDropDown(!showAdminDropDown);
@@ -152,7 +154,7 @@ export default function Header() {
                 </li>
               </div>
             }
-          </ul>
+          </ul> */}
         </div>
       </div>
     </header>

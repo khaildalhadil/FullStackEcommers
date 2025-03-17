@@ -13,7 +13,7 @@ export default function Error() {
 
       <p
       className="text-2xl "
-      >{error.data || error.message} {error.status}</p>
+      >{error?.response?.data?.message || error?.data || error?.message} {error?.status}</p>
 
       <button onClick={()=> navigate(-1) }
       className='bg-zinc-700  text-zinc-50 px-4 py-1 rounded-full cursor-pointer '

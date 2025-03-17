@@ -8,8 +8,10 @@ import AppLayout from './ui/AppLayou'
 import Error from './ui/Error'
 import Loader from './ui/Loader'
 import ViewItemsList from './features/Items/ViewItemsList'
-import AllOrder, {loader as allUserOrder} from './features/order/AllOrder'
+import AllOrder, {loader as getOneUser} from './features/order/AllOrder'
 import OneItem, {loader as getOneItem} from './features/Items/OneItem'
+import Profile from './features/users/Profile'
+
 
 const router = createBrowserRouter([
   {
@@ -47,11 +49,17 @@ const router = createBrowserRouter([
         loader: getOneItem,
       },
       {
-        path: '/user/orders/:id',
+        path: '/user/orders',
         element: <AllOrder />,
-        loader: allUserOrder,
-        errorElement: <Error />
+        errorElement: <Error />,
+        loader: getOneUser
+      },
+      {
+        path: '/user/profile',
+        element: <Profile />,
+        errorElement: <Error />,
       }
+
     ]
   }
 ])

@@ -1,6 +1,8 @@
 import express from "express";
 const app = express();
 import rateLimit from 'express-rate-limit';
+import cookieParser from "cookie-parser";
+import cors from 'cors';
 
 const limiter = rateLimit({
   // only 100 request in 1 hours
@@ -14,16 +16,23 @@ const limiter = rateLimit({
 import dotenv from "dotenv";
 dotenv.config();
 
+app.use(cors());
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*'); // allow all domains
-  res.setHeader('Access-Control-Allow-Methods', 'DELETE, POST, GET, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'DELETE, POST, GET, PATCH , patch, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
-  
   next();
 }); 
 
 app.use(express.json());
 app.use(express.static('public'));
+
+// Cookie parser middleware
+app.use(cookieParser());
+
+// upload img 
+app.use('/uploads', express.static('uploads'))
 
 import itmersRouter from './routers/itemsRouters.js';
 app.use('/', itmersRouter);

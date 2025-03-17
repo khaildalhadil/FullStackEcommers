@@ -26,14 +26,11 @@ export default function Register({setShowRegister}) {
 
     try {
       const res = await axios.post('http://127.0.0.1:8000/signup', {name: userName, email, password, passwordConfirm})
-      const decoded = jwtDecode(res.data.token);
-      dispatch(addUser(decoded));
-      // successMessage('تسجيل الدخول بنجاح')
-      cookies.set('e-commerce', res.data.token);
+      dispatch(addUser(res.data.data.user, res.data.token));
+      successMessage('تسجيل الدخول بنجاح')
       setShowRegister(false);
     } catch(err) {
-      console.log(err);
-      fallMessage('في مشكله')
+      fallMessage(err.response.data.message || 'في مشكله')
     }
   }
 

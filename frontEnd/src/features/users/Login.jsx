@@ -4,8 +4,8 @@ import {jwtDecode } from 'jwt-decode';
 import Cookies from 'universal-cookie';
 import { add as addUser } from './userSlice';
 import { useDispatch } from 'react-redux';
-import {ToastContainer} from 'react-toastify';
 import { fallMessage, successMessage } from '../../Messages';
+import { getOneUser } from '../../services/apiGetItems';
 
 export default function Login({setShowLogin}) {
 
@@ -31,15 +31,15 @@ export default function Login({setShowLogin}) {
     if (inValidEmail || inValidPassword) return;
     try {
       
-      const res = await axiso.post('http://127.0.0.1:8000/login', {email, password})
-      const decoded = jwtDecode(res.data.token);
-      dispatch(addUser(decoded));
-      // successMessage('تسجيل الدخول بنجاح')
-      cookies.set('e-commerce', res.data.token);
+      const res = await axiso.post('http://127.0.0.1:8000/login', 
+        {email, password},
+      )
+      dispatch(addUser(res.data.data.user, res.data.token));
+      successMessage('تسجيل الدخول بنجاح')
       setShowLogin(false);
     } catch(err) {
-      console.log(err);
-      fallMessage('الايميل او الباسور غلط')
+      console.log(`message Error: ${err.meesage} `+err);
+      fallMessage('الايميل او الباسورد غلط')
     }
   }
 
@@ -59,7 +59,6 @@ export default function Login({setShowLogin}) {
 
   return (
     <>
-      <ToastContainer position="top-center" autoClose={3000} />
       <div className='absolute top-30 left-[50%] -translate-x-[50%] max-w-96 bg-white text-zinc-600 z-3 
         text-lg text-center w-96 rounded p-5' >
         <i onClick={()=> setShowLogin(false)} className="fa-solid fa-x absolute top-3 hover:bg-zinc-200 cursor-pointer h-6 rounded-full right-3 text-sm text-zinc-700 px-2  py-1 "></i>

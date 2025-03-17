@@ -4,9 +4,10 @@ const API_URL = 'http://127.0.0.1:8000';
 
 // update user orderlist
 
-export async function updateOrderListuser(id, orderId) {
+export async function updateOrderListuser(id, orderId, token) {
   try {
-    const res = await axios.patch(`${API_URL}/user/addOrderToUser/${id}`, {orderId})
+    // console.log(id, orderId, token);
+    const res = await axios.patch(`${API_URL}/user/addOrderToUser`, {orderId, jwt: token, userId: id})
     console.log(res.data);
     if (!res.status == 200) throw Error("Failed to get the data from databasd");
     // const {message} = await res.json();
@@ -25,8 +26,6 @@ export async function updateItemListComment(itemId, commentId) {
     console.log(`message Error: ${err.message} \nAll Eroor: ${err}`)
   }
 }
-
-
 
 export async function getAllItems() {
   const res = await fetch(`${API_URL}/items`);
@@ -59,8 +58,8 @@ export async function sendOrder(userWithitems) {
   return req.data.userOrder;
 }
 
-export async function allUserOrder(id) {
-  const res = await axios.get(`${API_URL}/user/orders/${id}`)
-  const {orderID} = res.data.user;
-  return orderID;
+export async function getOneUser(token) {
+  const res = await axios.post(`${API_URL}/user/portfolio`, {jwt: token})
+  const userData = res.data.user;
+  return userData;
 }

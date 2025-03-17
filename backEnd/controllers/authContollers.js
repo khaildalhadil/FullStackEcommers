@@ -3,25 +3,123 @@ import sendEmail from '../utils/email.js';
 import {createToken, checkToekn} from '../utils/JWT.js';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
+import Order from '../models/order.js';
+import sharp from 'sharp';
+
+// for upload image
+import multer from 'multer';
+
+// setting the storage and loaction of a photo
+
+// ###### we don't need it because we need to store it in momery then 
+// ###### store it in our file to make it small and with not all qulity
+
+// const multerStorage = multer.diskStorage({
+//   // cb like next in express to move to anther method with some inforation in it 
+
+//   // i have to do two things 
+//   // 1) destination to specifies the directory where the uploaded file will be save
+//   destination: (req, file, cb) => {
+//     // null if there is error
+//     cb(null, 'public/img/users')
+//   },
+//   // 2) filename determines the name of the uploaded file  
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + "-" + file.originalname);
+//   }
+// })
+
+// #### i do this to store it in memory then i will stor it in the file
+// #### now we have the file in the req.file.buffer
+// <Buffer 89 50 4e 47 0d 0a 1a 0a 00 00 00 0d 49 48 44 52 00 00 05 69 00 00 03 3f 08 06 00 00 00 a3 ea 50 0f 00 00 00 01 73 52 47 42 00 ae ce 1c e9 00 00 00 
+//  04 ... 338882 more bytes>
+const multerStorage = multer.memoryStorage();
+
+// fileter to only user can download img
+const multerFilter = (req, file, cb) => {
+  // in mimetype will know if it is img, doc or video ect
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true)
+  } else {
+    cb(new Error("Invalid file type"), false)
+  }
+}
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+});
+
+export const uploadUserPhoto = upload.single('photo')
+
+export const resizeUserPhoto = (req, res, next) => {
+  if (!req.file) return next();
+  // to send it to next middleware
+  req.file.filename = `user-${Date.now()}.jpeg`
+  
+  sharp(req.file.buffer)
+  //  width & hight
+  .resize(500, 500)
+  // conver to jpg
+  .toFormat('jpeg')
+  .jpeg({quality: 90})
+  // convet from buffer to file
+  .toFile(`public/img/users/${req.file.filename}`)
+
+  next();
+};
+
 
 // check 
-export async function auth(req, res) {
-  
+export async function protect(req, res, next) {
+  try {
+
+    let token;
+    // bring it from the browser
+    token = req.body.jwt;
+    // 1) check if user login or register to get tokin from him/her
+    if (!token) return res.status(401).json({status: 'fall', message: 'you are not authorized to access login or register first ...'});
+
+    // 2) check if token is right or it is fick or not right 
+    const decodedTheToken = checkToekn(token);
+    
+    // 3) check if the user still exists get id from token
+    const userIdFromToken = decodedTheToken.useId;
+
+    const user = await User.findOne({_id: userIdFromToken}).populate({
+      path: 'orderID',
+      model: Order
+    });
+
+    if (!user) return res.status(401).json({status: 'fall', message: 'you are not authorized to access login or register first ...'});
+    
+    req.user = user;
+    next();
+  } catch(err) {
+    res.status(401).json({errorMessage: err.message, allError: err})
+  } 
 }
+
+// @DESC register or sinup / add new user
+// @ROUTE /signup
+// @ACCESS private for user
 
 export async function Register(req, res) {
   try {
 
     const {name, email, password, passwordConfirm} = req.body;
     const newUser = await User.create({name, email, password, passwordConfirm})
-    const token = createToken({name, email, useId: newUser._id, photo: newUser.photo});
-    res.status(201).json({status: 'sussecc', token, message: 'create new user', data: {user: newUser}})
+    const token = createToken({useId: newUser._id});
+    res.status(201).json({status: 'sussecc', message: 'create new user', token, data: {user: newUser}})
 
   } catch(err) {
     res.status(400).json({status: 'fall', message: err.message, allError: err})
   }
 }
 
+// @Desc Login For User
+// @route /login
+// @access private/Admin
 export async function Login(req, res) {
 
   const {email, password} = req.body;
@@ -37,12 +135,51 @@ export async function Login(req, res) {
     const checkIfSeemPassword = await bcrypt.compare(password, currUserPassword);
   
     if (!checkIfSeemPassword) return res.status(401).json({status: 'fall', message: 'email or password are wrong'});
-    const token = createToken({name: findUser.name, email: findUser.email, useId: findUser._id, photo: findUser.photo});
-    res.status(200).json({status: 'success', token, data: {user: findUser}})
+
+    const token = createToken({useId: findUser._id});
+  
+    const cookieOption = {
+      // this prevents js from accessing the cookie in the browser
+      httpOnly: true,
+      // cookie will send over both http and https
+      // in production, it should be set to ture to enforce https only transmition
+      // secure: false,
+      sameSite: 'None',
+      path: 'http://localhost/', // 
+      // EXPIRES in 30 days
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+
+
+    }
+
+    res.cookie('jwt', token, cookieOption);
+    findUser.password = undefined;
+    res.status(200).json({status: 'success',token , data: {user: findUser}})
 
   } catch(err) {
     res.status(400).json({status: 'fall', message: err.message, allError: err})
   }
+}
+
+export async function restrictTo(req, res, next) {
+
+  if (req.user.role != 'admin') {
+    res.status(403).json({status: 'full', message: 'You are not authorized'})
+    return 
+  }
+  next();
+}
+
+// @DESC  logout user / remove the tokin
+// @ROUTE POST /api/user/logout
+// @ACCESS Private
+
+export async function LogOut(req, res) {
+  res.cookie('jwt', '', {
+    httpOnly: true,
+    expires: new Date(0),
+  })
+  res.status(200).json({status: 'success', message: 'logout successfully...'})
 }
 
 export async function foregotPassword(req, res, next) {
@@ -128,7 +265,7 @@ export async function ressetPassword(req, res, next) {
     await userFromToken.save();
     
     // 4) Log the use in, send JWT
-    const token = createToken({name: userFromToken.name, email: userFromToken.email, useId: userFromToken._id, photo: userFromToken.photo});
+    const token = createToken({useId: userFromToken._id});
     res.status(200).json({status: 'success', token, data: {user: userFromToken}})
   } catch(err) {
     res.status(500).json({status: 'fall', errorMessage: err.message , allMessage: err})

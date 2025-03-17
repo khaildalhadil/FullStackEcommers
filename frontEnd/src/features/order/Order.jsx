@@ -3,6 +3,7 @@ import { getOneOrder } from "../../services/apiGetItems";
 import { useDispatch, useSelector } from "react-redux";
 import { add as addOrder } from "./orderSlice";
 import ItemOrder from "./ItemOrder";
+import { removeAllCart } from "../cart/CartSlice";
 
 export default function Order() {
   const newOrder = useLoaderData();
@@ -14,6 +15,8 @@ export default function Order() {
   // to days letter
   const date = new Date();
   const twoDays = date.getDate() + 2;
+
+  dispatch(removeAllCart());
 
   return(
     <div className=" text-end max-w-7xl m-auto mt-10 bg-white shadow-md inset-shadow-2xs p-12"  >
