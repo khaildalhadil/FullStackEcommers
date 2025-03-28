@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default function Comment({comment}) {
-
+  console.log(comment);
   return (
     <div 
     key={comment._id}
@@ -12,7 +12,7 @@ export default function Comment({comment}) {
       <div className='flex gap-3' >
 
         <div className='flex flex-col text-end ' >
-          <p className='font-bold' >{comment.user.name}</p>
+          <p className='mb-1' >{comment.user.name}</p>
           <div className='flex flex-row-reverse' >
             {Array.from({length: 5}, (_, index)=> 
               index >= comment.rating ? 

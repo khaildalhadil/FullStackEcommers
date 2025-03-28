@@ -7,10 +7,13 @@ import CreateOrder, { action as sendFormOrderAction } from './features/order/Cre
 import AppLayout from './ui/AppLayou'
 import Error from './ui/Error'
 import Loader from './ui/Loader'
-import ViewItemsList from './features/Items/ViewItemsList'
+import ViewItemsList, {loader as getAllItemForAdmin} from './features/admin/ViewItemsList'
 import AllOrder, {loader as getOneUser} from './features/order/AllOrder'
 import OneItem, {loader as getOneItem} from './features/Items/OneItem'
 import Profile from './features/users/Profile'
+import AddItem, {action as sendNewSofaAdmin} from './features/admin/AddItem'
+import UpdateItem, {loader as updateItem} from './features/admin/UpdateItem'
+import AllUsers, {loader as allUserForAdmin} from './features/admin/AllUsers'
 
 
 const router = createBrowserRouter([
@@ -40,8 +43,29 @@ const router = createBrowserRouter([
         errorElement: <Error />
       },
       {
-        path: '/item/all_Itesm',
-        element: <ViewItemsList />
+        path: '/admin/items',
+        element: <ViewItemsList />,
+        loader: getAllItemForAdmin,
+        errorElement: <Error />,
+
+      },
+      {
+        path: '/admin/items/addItem',
+        element: <AddItem />,
+        errorElement: <Error />,
+        action: sendNewSofaAdmin
+      },
+      {
+        path: '/admin/items/:id',
+        element: <UpdateItem />,
+        errorElement: <Error />,
+        loader: updateItem,
+      },
+      {
+        path: '/admin/view/users',
+        element: <AllUsers />,
+        errorElement: <Error />,
+        loader: allUserForAdmin
       },
       {
         path: '/item/:itemId',

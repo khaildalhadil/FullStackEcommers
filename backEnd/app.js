@@ -49,6 +49,9 @@ app.use('/', user);
 import comment from './routers/commentRouters.js';
 app.use('/', comment);
 
+import admin from './routers/admin-Routes.js';
+app.use('/', admin);
+
 app.use('*', (req, res, next) => {
   res.status(404).json({errMessage: `Can't find this route ${req.originalUrl} `});
 })

@@ -30,7 +30,7 @@ export default function Header() {
 
   return (
     <header 
-      className='w-screen border-b-zinc-200 border relative ' >
+      className='w-screen border-b-zinc-200 border relative py-3' >
       {showLogin && <Login setShowLogin={setShowLogin} />}
       {showRegister && <Register setShowRegister={setShowRegister} />}
       {!showLogin && !showRegister}
@@ -48,7 +48,7 @@ export default function Header() {
             <i className="fa-solid fa-cart-shopping border p-2  border-zinc-300 rounded"></i>
             <div className='absolute w-7 h-7 bg-blue-400 -top-3 -right-3 rounded-full flex justify-center items-center text-white font-bold' >{cart.length} </div>
           </div>
-          <i className="fa-solid fa-moon border p-2 w-8   border-zinc-300 rounded"></i>
+          {/* <i className="fa-solid fa-moon border p-2 w-8   border-zinc-300 rounded"></i> */}
           <div className=' relative' >
             {userInfo?.userName? 
             <div
@@ -125,36 +125,39 @@ export default function Header() {
               </div>
             }
           </div>
-          {/* <ul className=' relative' >
-            <li
-              onClick={() => {
-                setShowAdminDropDown(!showAdminDropDown);
-                setShowDetailsAboutUserIcon(false)
-              }}
-              className=' list-none  border p-2 px-5 border-zinc-300 rounded cursor-pointer ' >
-              <button className=' cursor-pointer' >Admin  <i className="fa-solid fa-caret-down cursor-pointer"></i></button>
-            </li>
-            {showAdminDropDown && 
-              <div className='absolute rounded mt-2 border shadow-md border-zinc-300 box bg-white right-0' >
-                <Link
-                onClick={()=> showAdminDropDown(false)}
-                to='/item/all_Itesm' >
+          {userInfo?.role === 'admin' &&
+            <ul className=' relative' >
+              <li
+                onClick={() => {
+                  setShowAdminDropDown(!showAdminDropDown);
+                  setShowDetailsAboutUserIcon(false)
+                }}
+                className=' list-none  border p-2 px-5 border-zinc-300 rounded cursor-pointer ' >
+                <button className=' cursor-pointer' >Admin  <i className="fa-solid fa-caret-down cursor-pointer"></i></button>
+              </li>
+              {showAdminDropDown && 
+                <div className='absolute rounded mt-2 border shadow-md border-zinc-300 box bg-white right-0' >
+                  <Link
+                  onClick={()=> showAdminDropDown(false)}
+                  to='/admin/items' >
+                    <li
+                      className='flex items-center gap-2 border-b border-zinc-200 p-2 pl-4 cursor-pointer hover:bg-zinc-100 justify-self-center '>
+                      <p>المنتجات</p>
+                    </li>
+                  </Link>
                   <li
-                    className='flex items-center gap-2 border-b border-zinc-200 p-2 pl-4 cursor-pointer hover:bg-zinc-100 justify-self-center '>
-                    <p>العناصر</p>
+                    className=' flex items-center gap-2 border-b border-zinc-200 p-2 pl-4 cursor-pointer hover:bg-zinc-100 justify-self-center'>
+                    <p>الطلبات</p>
                   </li>
-                </Link>
-                <li
-                  className=' flex items-center gap-2 border-b border-zinc-200 p-2 pl-4 cursor-pointer hover:bg-zinc-100 justify-self-center'>
-                  <p>الطلبات</p>
-                </li>
-                <li
-                  className=' flex items-center gap-2 border-b border-zinc-200 p-2 pl-4 cursor-pointer hover:bg-zinc-100 justify-self-center'>
-                  <p>المستخدمين</p>
-                </li>
-              </div>
-            }
-          </ul> */}
+                  <li
+                    onClick={()=> navigate('/admin/view/users')}
+                    className=' flex items-center gap-2 border-b border-zinc-200 p-2 pl-4 cursor-pointer hover:bg-zinc-100 justify-self-center'>
+                    <p>المستخدمين</p>
+                  </li>
+                </div>
+              }
+            </ul>
+          }
         </div>
       </div>
     </header>

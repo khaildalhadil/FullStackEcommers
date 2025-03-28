@@ -31,15 +31,16 @@ export default function CreateOrder() {
     
     {cart.length <= 0 ? <MTCart />: 
       <div className="" >
-        <div className="flex w-4/5 m-auto mt-10 background_div relative h-screen " >
-          <div className="text-center " >
-            <div className=" h-[30%]">
+        <div className="lg:flex w-4/5 m-auto mt-10 background_div relative h-screen " >
+          <div className="text-center  hidden xl:block " >
+            <div className="h-[30%]">
             </div>
             <img  
             className="h-100"
             src="/images/log.svg" alt="paymanet img" />
           </div>
-          <Form method="POST" id="myForm" className="mt-40 ml-80 relative text-end border border-blue-300 h-fit p-10 rounded w-[30%]" >
+          <Form method="POST" id="myForm" 
+          className=" mt-0 md-0 md:mt-40 md:ml-80 relative text-end border border-blue-300 h-fit p-10 rounded  lg:w-[50%] 2xl:w-[30%]" >
             <p className="text-3xl font-bold text-center text-zinc-600" >مستعد لطلب ؟ </p>
             <div className="flex flex-col text-2xl my-4"   >
               <label className="mb-1 text-lg" htmlFor="">ادخل الاسم</label>

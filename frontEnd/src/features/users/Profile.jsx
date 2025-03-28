@@ -59,11 +59,13 @@ export default function Profile() {
   }
 
   async function uploadFile() {
+    if (!file) return;
     
     const formData = new FormData();
     formData.append("photo", file)
     formData.append('userId', userId)
-
+    
+    console.log(formData);
     const res = await axios.post(
       'http://localhost:8000/user/updateMePhoto', 
         formData,
@@ -72,9 +74,9 @@ export default function Profile() {
   }
 
   return (
-    <div className='flex max-w-[1700px] m-auto' >
+    <div className='flex flex-col-reverse max-w-[1700px] m-auto mx-3 lg:flex-row mb-10' >
       <div className=' texce flex-1 text-center mt-20 space-y-6' >
-        <div className=' border w-[50%] m-auto p-10 border-stone-300 rounded shadow-lg' >
+        <div className=' border  lg:w-[70%] xl:w-[50%] m-auto p-10 border-stone-300 rounded shadow-lg' >
           <div >
             <img 
               className='h-60 m-auto rounded-full w-60 object-cover'

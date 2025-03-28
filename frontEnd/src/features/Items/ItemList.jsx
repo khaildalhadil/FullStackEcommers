@@ -32,19 +32,6 @@ export default function ItemList({itemData}) {
     dispatch(removeOne(_id))
   }
   
-  // img 
-  const [imgNum, setImgNum] = useState(0);
-
-  function increment() {
-    if (imgNum === 0) return setImgNum((imgNum) => imgNum = 2);
-    setImgNum((imgNum) => imgNum-=1);
-    console.log(imgNum)
-  }
-  function decrement() {
-    if (imgNum === 2) return setImgNum((imgNum) => imgNum = 0);
-    setImgNum((imgNum) => imgNum+=1);
-
-  }
 
   const navigate = useNavigate();
   return (
@@ -61,23 +48,8 @@ export default function ItemList({itemData}) {
           onClick={()=> navigate(`/item/${_id}`)}
           id='img_to_scal' 
           className='w-[100%] h-50 object-cover ' 
-          src={`.${itemImg == '/images/imgscroll0.jpg'? `/images/imgscroll${imgNum}.jpg`: itemImg}`} alt={itemData.itemName} 
+          src={`${itemImg}`} alt={itemData.itemName} 
         />
-        {showArrows &&
-          <>
-            <i
-              onClick={increment}
-              className="fa-solid fa-angle-left absolute left-0 top-[50%] -translate-y-[50%] bg-stone-200 py-2 rounded-full px-3 opacity-85 mx-2 shadow-md cursor-pointer hover:bg-stone-100 hover:opacity-100"></i>
-            <i
-              onClick={decrement}
-              className="fa-solid fa-angle-right absolute right-0 top-[50%] -translate-y-[50%] bg-stone-200 py-2 rounded-full px-3 opacity-85 mx-2 shadow-md cursor-pointer hover:bg-stone-100 hover:opacity-100"></i>
-          </>
-        }
-      <div className='flex gap-2 absolute bottom-1 left-[50%] -translate-x-[50%] h-3 w-12 items-center' >
-        <div className='h-2 w-2 transition-all cursor-pointer hover:h-3 hover:w-3 rounded-full  bg-stone-100 opacity-70 hover:bg-white hover:opacity-100' ></div>
-        <div className='h-2 w-2 transition-all cursor-pointer hover:h-3 hover:w-3  rounded-full bg-stone-100 opacity-70 hover:bg-white hover:opacity-100' ></div>
-        <div className='h-2 w-2 transition-all cursor-pointer hover:h-3 hover:w-3 rounded-full  bg-stone-100 opacity-70 hover:bg-white hover:opacity-100' ></div>
-      </div>
       </div>
       <p className='text-lg font-bold text-zinc-600 p-2' >{itemName}</p>
       <p className='text-lg font-bold text-zinc-600 p-2' >﷼ {itemPrice}</p>

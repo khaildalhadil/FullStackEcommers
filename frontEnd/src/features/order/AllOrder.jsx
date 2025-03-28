@@ -10,7 +10,7 @@ export default function AllOrder() {
   console.log(allOrders);
   
   return (
-    <div className='max-w-[1300px] m-auto' >
+    <div className='max-w-[1300px] m-auto px-3' >
       {/* header */}
 
       <h1 className='mb-5 text-end text-4xl mt-10' >🛒 طلباتك</h1>

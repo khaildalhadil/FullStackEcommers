@@ -4,7 +4,7 @@ import User from "../models/userScham.js";
 export async function getAllComment(req, res, next) {
   try {
     
-    const allComment = await Comment.find();
+    const allComment = await Comment.find().populate('user');
     res.status(200).json({status: "success", length: allComment.length, data: {allComment}})
     
   } catch(err) {

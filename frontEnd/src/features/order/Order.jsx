@@ -25,7 +25,7 @@ export default function Order() {
         <p className="font-bold text-stone-700" >{userName} ,مرحبا </p>
         <p className="text-stone-600 mt-1"> سيتم توصيل طلبيتك بعد يومين بتاريخ  {twoDays}/{date.getMonth()}/{date.getFullYear()}</p>
       </div>
-      <div className="flex justify-between mt-8 border border-stone-100 p-4" >
+      <div className="flex flex-col md:flex-row md:justify-between mt-8 border border-stone-100 p-4" >
         <div>
           <p className="text-stone-500 mb-2" > العنوان و رقم التواصل</p>
           <p className="font-bold text-stone-600" >{newOrder.phone} / {newOrder.location} </p>

@@ -15,9 +15,9 @@ export default function Cart() {
         اغراضك
       </h1>}
       
-      <div className=" flex justify-between gap-5 mt-10">
+      <div className=" flex flex-col-reverse items-center lg:flex lg:justify-between lg:flex-row gap-5 mt-10">
       {totlaPill !== 0 && 
-        <div className="w-[30%] h-52 rounded border border-zinc-200 p-4">
+        <div className=" w-[100%] lg:w-[30%] h-52 rounded border border-zinc-200 p-4">
           <div className="flex justify-between border-b border-b-zinc-300 py-3 " >
             <p>{totlaPill} ريال</p>
             <p>مجموع المبلغ</p>
@@ -39,7 +39,7 @@ export default function Cart() {
       }
 
           
-        <ul className={`${cart.length <= 0 ? 'w-screen mt-30' :'w-[70%]'} flex flex-col gap-4 `} >
+        <ul className={`${cart.length <= 0 ? 'w-screen mt-30' :'lg:w-[70%] w-[100%]'} flex flex-col gap-4 `} >
           {cart.length <= 0 ? <MTCart />: 
           cart.map((oneCart, i)=> <SingleCard item={oneCart} key={i} />)
           }

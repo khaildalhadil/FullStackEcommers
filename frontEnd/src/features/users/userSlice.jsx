@@ -28,6 +28,7 @@ export function add(allUserData, token) {
     userName: allUserData.name, 
     userEmail: allUserData.email, 
     photo: allUserData.photo,
+    role: allUserData.role,
     token
   }
   localStorage.setItem('userInfo', JSON.stringify(userData));

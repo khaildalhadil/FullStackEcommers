@@ -4,15 +4,15 @@ import { useSelector } from 'react-redux'
 export default function HeroImg() {
 
   return (
-    <div className="w-[55%] relative" >
-      <i           
+    <div className="lg:w-[55%] sm:w-[90%] relative" >
+      {/* <i           
       className="fa-solid fa-arrow-right absolute -right-10 cursor-pointer top-[47%] translate-y-[-50%]
-      border p-2 rounded-full border-zinc-400"></i>
+      border p-2 rounded-full border-zinc-400"></i> */}
       <img 
         className="max-h-[100%] p-2 border border-zinc-200 rounded"
         src="./images/hero1.jpg" alt="img icon" />
-      <i className="fa-solid fa-arrow-left absolute -left-10 cursor-pointer top-[47%] translate-y-[-50%]
-      border p-2 rounded-full border-zinc-400"></i>
+      {/* <i className="fa-solid fa-arrow-left absolute -left-10 cursor-pointer top-[47%] translate-y-[-50%]
+      border p-2 rounded-full border-zinc-400"></i> */}
       <div>
         <ul>
           {/* <li className='lists_of_dote '>

@@ -80,7 +80,7 @@ export default function Login({setShowLogin}) {
           <p className='border-b border-zinc-200'>or</p>
           <div className='py-5' >
              {/* ادخل الايميل */}
-            <p className='text-end mb-1 ' > khalid@gamil.com</p>
+            <p className='text-end mb-1 ' > الدخل الايميل</p>
             <input 
               ref={emailInput}
               value={email}

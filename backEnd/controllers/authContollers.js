@@ -4,10 +4,10 @@ import {createToken, checkToekn} from '../utils/JWT.js';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import Order from '../models/order.js';
-import sharp from 'sharp';
 
 // for upload image
 import multer from 'multer';
+import sharp from 'sharp';
 
 // setting the storage and loaction of a photo
 
@@ -53,6 +53,7 @@ const upload = multer({
 export const uploadUserPhoto = upload.single('photo')
 
 export const resizeUserPhoto = (req, res, next) => {
+  
   if (!req.file) return next();
   // to send it to next middleware
   req.file.filename = `user-${Date.now()}.jpeg`
@@ -72,6 +73,7 @@ export const resizeUserPhoto = (req, res, next) => {
 
 // check 
 export async function protect(req, res, next) {
+
   try {
 
     let token;
@@ -94,6 +96,7 @@ export async function protect(req, res, next) {
     if (!user) return res.status(401).json({status: 'fall', message: 'you are not authorized to access login or register first ...'});
     
     req.user = user;
+
     next();
   } catch(err) {
     res.status(401).json({errorMessage: err.message, allError: err})
@@ -148,8 +151,6 @@ export async function Login(req, res) {
       path: 'http://localhost/', // 
       // EXPIRES in 30 days
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-
-
     }
 
     res.cookie('jwt', token, cookieOption);

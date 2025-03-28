@@ -5,7 +5,7 @@ const itemsSchima = new mongoose.Schema({
     type: String,
   },
   itemImg: {
-    type: [String]
+    type: String
   },
   itemPrice: {
     type: Number,
@@ -14,20 +14,17 @@ const itemsSchima = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-  itemsStars: Number,
+  itemColor: {
+    type: String
+  },
+  itemCount: {
+    type: Number,
+  },
   itemDis: {
     type: String,
   },
-  ratingsAverage: {
-    type: Number,
-    default: 1,
-    min: [1, 'Rating must be above 1.0'],
-    mix: [5, 'Rating must be below 5.0'],
-  },
-  ratingsQuantity: {
-    type: Number,
-    default: 0
-  }
+
+
 },{
   toJSON: {virtuals: true},
   toObject: {virtuals: true},
